@@ -37,12 +37,12 @@ router.post('/login', function (req, res, next) {
 
 router.post('/register', function (req, res, next) {
   if (!req.body.email || !req.body.name || !req.body.password) {
-    res.send('please input email, name, password to create account!!!!');
+    res.status(400).json({ message: 'please input email, name, password to create account!!!!' });
     return;
   }
   userModel.findOne({ email: req.body.email }).then((currentUser) => {
     if (currentUser) {
-      res.send("create account failed, email is already exist!!!")
+      res.status(400).json({ message: "create account failed, email is already exist!!!" })
     } else {
       let newUser = new userModel({
         email: req.body.email,
@@ -50,7 +50,7 @@ router.post('/register', function (req, res, next) {
         password: req.body.password
       });
       newUser.save();
-      res.send('create account successfully!!!');
+      res.status(200).json({ message: 'create account successfully!!!' });
     }
   })
 });
